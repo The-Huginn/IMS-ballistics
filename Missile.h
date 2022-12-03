@@ -41,7 +41,7 @@ class Missile : public ConditionDown {
     public:
         static constexpr double PI = 3.1415;
         Engine engine;
-        Missile(double initialVelocity, double initialAngle, double initialY, double _c, double projectileWeight, double fuelWeight, double boostersWeight);
+        Missile(double initialVelocity, double initialAngle, double initialY, double _c, double projectileWeight, double boostersWeight, double fuelWeight);
 
         void Action() override;
         void activateBooster();

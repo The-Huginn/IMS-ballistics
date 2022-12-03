@@ -9,7 +9,7 @@
 const double g_ = 9.81;
 const double R = 6378000;
 
-Missile::Missile(double initialVelocity, double initialAngle, double initialY, double _c, double projectileWeight, double fuelWeight, double boostersWeight) :
+Missile::Missile(double initialVelocity, double initialAngle, double initialY, double _c, double projectileWeight, double boostersWeight, double fuelWeight) :
     ConditionDown(y),
     y(engine.vy, initialY),
     x(engine.vx, 0),
@@ -38,7 +38,7 @@ void Missile::releaseBooster() {
 }
 
 double Missile::getTotalWeight() {
-    return totalWeight.Value() + engine.fuel.Value();
+    return totalWeight.Value();
 }
 
 void Missile::Action() {
@@ -61,7 +61,9 @@ void Missile::Action() {
 void Missile::Out() {
     Print("%-9.3f % -9.3g % -9.3g % -9.3g % -9.3g % -9.3g % -9.3g\n",
             T.Value(), y.Value(), x.Value(), engine.vy.Value(), engine.vx.Value(), getTotalWeight(), !engine.liftoff ? engine.initialAngle : engine.angle.Value());
-    boosters[attachedBooster]->Out();
+    
+    if (attachedBooster < boostersSize)
+        boosters[attachedBooster]->Out();
 }
 
 Missile::Engine::Engine(double initialVelocity, double initialAngle_, double c_, double fuelWeight, Integrator *y) :
@@ -70,7 +72,7 @@ Missile::Engine::Engine(double initialVelocity, double initialAngle_, double c_,
     initialAngle(initialAngle_ * PI / 180),
     g(Max(0.5, g_ * (1 - 2* (*y) / R))),    // considering at least 0.5 ms of g
     constantVy(-g - c*vy),
-    constantVx(-c*vx),
+    constantVx(-c*vx + 0.03),
     angle(ATan(vy/vx)),
     fuel(0.0, fuelWeight),
     vy(constantVy, (initialVelocity <= 0) ? 0.001 : initialVelocity * sin(initialAngle)),
