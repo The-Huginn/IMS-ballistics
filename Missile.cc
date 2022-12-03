@@ -70,9 +70,9 @@ Missile::Engine::Engine(double initialVelocity, double initialAngle_, double c_,
     ConditionUp(vy),
     c(c_),
     initialAngle(initialAngle_ * PI / 180),
-    g(Max(0.5, g_ * (1 - 2* (*y) / R))),    // considering at least 0.5 ms of g
+    g(Max(0.1, g_ * (1 - 2* (*y) / R))),    // considering at least 0.5 ms of g
     constantVy(-g - c*vy),
-    constantVx(-c*vx + 0.03),
+    constantVx(-c*vx + 30),
     angle(ATan(vy/vx)),
     fuel(0.0, fuelWeight),
     vy(constantVy, (initialVelocity <= 0) ? 0.001 : initialVelocity * sin(initialAngle)),

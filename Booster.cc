@@ -20,8 +20,8 @@ void Booster::Action() {
 void Booster::activate() {
     fuel.SetInput(-stage.burnRate);
     missile->engine.fuel.SetInput(-stage.burnRate);
-    missile->engine.vy.SetInput(missile->engine.constantVy + (stage.burnRate * stage.ve / (missile->getTotalWeight() + fuel)) / 2.0 * (missile->engine.liftoff ? Sin(missile->engine.angle) : Sin(missile->engine.initialAngle)));
-    missile->engine.vx.SetInput(missile->engine.constantVx + (stage.burnRate * stage.ve / (missile->getTotalWeight() + fuel)) / 2.0 * (missile->engine.liftoff ? Cos(missile->engine.angle) : ((missile->engine.initialAngle >= missile->PI / 2 - 0.001 && missile->engine.initialAngle <= missile->PI / 2 + 0.001 ? 0.0 : Cos(missile->engine.initialAngle)))));
+    missile->engine.vy.SetInput(missile->engine.constantVy + (stage.burnRate * stage.ve / (missile->getTotalWeight() + fuel)) * (missile->engine.liftoff ? Sin(missile->engine.angle) : Sin(missile->engine.initialAngle)));
+    missile->engine.vx.SetInput(missile->engine.constantVx + (stage.burnRate * stage.ve / (missile->getTotalWeight() + fuel)) * (missile->engine.liftoff ? Cos(missile->engine.angle) : ((missile->engine.initialAngle >= missile->PI / 2 - 0.001 && missile->engine.initialAngle <= missile->PI / 2 + 0.001 ? 0.0 : Cos(missile->engine.initialAngle)))));
 }
 
 double Booster::getBoosterWeight() {

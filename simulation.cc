@@ -19,8 +19,8 @@ Booster **boosters;
 unsigned int boostersSize = sizeof(stages) / sizeof(Stage);
 
 // Update the last 2 value2 as
-//      sum of all stages' fuel
 //      sum of all stages' totalWeight without fuel
+//      sum of all stages' fuel
 Missile p(0.0, 89.5, 0.0, 0.000295, 1500.0, 2292.0, 20785.0);
 
 void Sample() {
