@@ -14,14 +14,14 @@
  *  this is simulated currently with a bullet-like drag, i.e. c = 0.000295
 */
 
-Stage stages[] = {{1000.0, 1800.0, 220.0, 10.0}, {700.0, 1000.0, 50.0, 9}};
+Stage stages[] = {{2292.0, 20785.0, 2700.0, 346.416}};//, {700.0, 1000.0, 500.0, 9}};
 Booster **boosters;
 unsigned int boostersSize = sizeof(stages) / sizeof(Stage);
 
 // Update the last 2 value2 as
 //      sum of all stages' fuel
 //      sum of all stages' totalWeight without fuel
-Missile p(0.0, 89.5, 0.0, 0.000295, 1500.0, 2800.0, 1700.0);
+Missile p(0.0, 89.5, 0.0, 0.000295, 1500.0, 2292.0, 20785.0);
 
 void Sample() {
     p.Out();

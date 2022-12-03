@@ -16,7 +16,6 @@ extern unsigned int boostersSize;
 extern Booster **boosters;
 
 class Missile : public ConditionDown {
-    static constexpr double PI = 3.1415;
     Integrator y, x;
     Variable totalWeight;
     unsigned int attachedBooster;
@@ -29,7 +28,7 @@ class Missile : public ConditionDown {
             bool liftoff = false;
             Expression constantVy, constantVx, angle, g;
             Integrator vx, vy;
-            Integrator fuel, thrust;
+            Integrator fuel;
 
             Engine(double initialVelocity, double initialAngle_, double c_, double fuelWeight, Integrator *y);
             void Liftoff();
@@ -40,6 +39,7 @@ class Missile : public ConditionDown {
 
 
     public:
+        static constexpr double PI = 3.1415;
         Engine engine;
         Missile(double initialVelocity, double initialAngle, double initialY, double _c, double projectileWeight, double fuelWeight, double boostersWeight);
 

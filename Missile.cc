@@ -31,7 +31,6 @@ void Missile::activateBooster() {
 void Missile::releaseBooster() {
     Print("# Releasing Booster %d \n", attachedBooster);
 
-    engine.thrust.SetState(0.0);
     totalWeight = totalWeight.Value() - boosters[attachedBooster]->getBoosterWeight();
 
     attachedBooster++;
@@ -50,7 +49,9 @@ void Missile::Action() {
         engine.vx.SetState(0.0);
         engine.vx.SetInput(0.001);
         x.SetState(0.0);
-        return;
+
+        if (attachedBooster < boostersSize)
+            return;
     }
 
     Out();
@@ -58,8 +59,8 @@ void Missile::Action() {
 }
 
 void Missile::Out() {
-    Print("%-9.3f % -9.3g % -9.3g % -9.3g % -9.3g % -9.3g % -9.3g % -9.3g\n",
-            T.Value(), y.Value(), x.Value(), engine.vy.Value(), engine.vx.Value(), engine.thrust.Value(), getTotalWeight(), !engine.liftoff ? engine.initialAngle : engine.angle.Value());
+    Print("%-9.3f % -9.3g % -9.3g % -9.3g % -9.3g % -9.3g % -9.3g\n",
+            T.Value(), y.Value(), x.Value(), engine.vy.Value(), engine.vx.Value(), getTotalWeight(), !engine.liftoff ? engine.initialAngle : engine.angle.Value());
     boosters[attachedBooster]->Out();
 }
 
@@ -72,15 +73,13 @@ Missile::Engine::Engine(double initialVelocity, double initialAngle_, double c_,
     constantVx(-c*vx),
     angle(ATan(vy/vx)),
     fuel(0.0, fuelWeight),
-    vy(constantVy + thrust * Sin(initialAngle), (initialVelocity <= 0) ? 0.001 : initialVelocity * sin(initialAngle)),
-    vx(constantVx + thrust * ((initialAngle >= PI / 2 - 0.001 && initialAngle <= PI / 2 + 0.001) ? 0.0 : Cos(angle)), (initialAngle >= PI / 2 - 0.001 && initialAngle <= PI / 2 + 0.001 ) ? 0.0 : initialVelocity * cos(initialAngle))   // special case for rounding problem
+    vy(constantVy, (initialVelocity <= 0) ? 0.001 : initialVelocity * sin(initialAngle)),
+    vx(constantVx, (initialAngle >= PI / 2 - 0.001 && initialAngle <= PI / 2 + 0.001 ) ? 0.0 : initialVelocity * cos(initialAngle))   // special case for rounding problem
     {}
 
 void Missile::Engine::enginesOff() {
     vy.SetInput(constantVy);
     vx.SetInput(constantVx);
-    thrust.SetState(0.0);
-    thrust.SetInput(0.0);
     fuel.SetState(0.0);
     fuel.SetInput(0.0);
 }
@@ -88,9 +87,9 @@ void Missile::Engine::enginesOff() {
 void Missile::Engine::Liftoff() {
     std::cerr << T.Value();
     
-    vy.SetInput(constantVy + thrust * Sin(angle));
+    // vy.SetInput(constantVy);
     vx.SetState(vy.Value()/tan(initialAngle));
-    vx.SetInput(constantVx + thrust * Cos(angle));
+    // vx.SetInput(constantVx);
 }
 
 void Missile::Engine::Action() {
